@@ -1,4 +1,4 @@
-package com.application.webScraping;
+package com.application.webScraping.service;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,27 +42,33 @@ public class WebScraper {
         try {
             Document doc = Jsoup.connect(this.url).get();
             Elements links = findPdfLinks(doc);
-            matchPdfNames(links, pdfLinks, pdfNames);
+            pdfLinks = matchPdfNames(pdfNames, links, pdfLinks);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return pdfLinks;
     }
 
-    private static Elements findPdfLinks(Document doc) {
-        return doc.select("a[href$=.pdf]");
-    }
-
-    private static void matchPdfNames(Elements links, Map<String, String> pdfLinks, String[] anexos) {
-        for (Element link : links) {
-            String text = link.text().toLowerCase();
-            for (String anexo : anexos) {
-                if (text.contains(anexo.toLowerCase()) && !pdfLinks.containsKey(anexo)) {
-                    pdfLinks.put(anexo, link.absUrl("href"));
+    public Map<String, String> matchPdfNames(String[] pdfNames, Elements links, Map<String, String> pdfLinks) {
+        for(String pdfName : pdfNames) {
+            String pdfNameLower = pdfName.toLowerCase();
+            for (Element link : links) {
+                if(link.text().toLowerCase().contains(pdfNameLower)) {
+                    pdfLinks.put(pdfName, link.absUrl("href"));
+                    break;
                 }
             }
         }
+        return pdfLinks;
     }
+
+
+
+
+    public Elements findPdfLinks(Document doc) {
+        return doc.select("a[href$=.pdf]");
+    }
+
 
     public String getUrl() {
         return url;
