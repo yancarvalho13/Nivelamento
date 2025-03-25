@@ -6,15 +6,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.swing.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class WebScraper {
 
@@ -92,6 +96,46 @@ public class WebScraper {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    //Recebe um Set de caminhos do diretorio e um caminho de saída do arquivo zip
+    public void zipFiles(Set<String> filesPath, String outputPath) {
+      try(FileOutputStream fileOutputStream = new FileOutputStream(outputPath+"/zipedFiles.zip");
+          BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+          ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);) {
+
+
+        for (String filePath : filesPath) {
+            File file = new File(filePath);
+
+            ZipEntry zipEntry = new ZipEntry(file.getName());
+            zipOutputStream.putNextEntry(zipEntry);
+
+            try(FileInputStream fileInputStream = new FileInputStream(file);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);) {
+
+                byte[] buffer = new byte[16 * 1024]; //Utiliza um buffer de 16k para otimizar o desempenho
+                while(bufferedInputStream.read(buffer) != -1) {
+                    zipOutputStream.write(buffer, 0, buffer.length);
+                }
+            }
+
+            zipOutputStream.closeEntry();
+        }
+      } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+    }
+
+    //Recebe um caminho para um diretório e coleta os caminhos de todos os arquivos do diretório
+    public Set<String> listDirectoryFiles(String directory) {
+        return Stream.of(Objects.requireNonNull(new File(directory).listFiles()))
+                .filter(file -> !file.isDirectory())
+                .map(File::getAbsolutePath)
+                .collect(Collectors.toSet());
     }
 
     // Seleciona elementos de links que terminam com .pdf no documento
