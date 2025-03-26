@@ -1,4 +1,4 @@
-package com.application.webScraping.service;
+package com.application.webScraping.service.webScrapp;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
