@@ -2,8 +2,6 @@ package com.application.webScraping;
 
 import com.application.webScraping.service.WebScraper;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.*;
 
 public class Main {
