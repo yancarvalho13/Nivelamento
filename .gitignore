@@ -36,10 +36,21 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/src/main/resources/downloads/anexoi.pdf
-/src/main/resources/downloads/anexoii.pdf
-/src/main/resources/downloads/zipedFiles.zip
-/src/main/resources/downloads/anexoii.csv
-/src/main/resources/downloads/Teste_Yan_Carvalho.zip
-/src/main/resources/downloads/anexos.zip
-/src/main/resources/downloads/anexoi.csv
+/src/downloads/anexoi.pdf
+/src/downloads/anexoii.pdf
+/src/downloads/zipedFiles.zip
+/src/downloads/anexoii.csv
+/src/downloads/Teste_Yan_Carvalho.zip
+/src/downloads/anexos.zip
+/src/downloads/anexoi.csv
+/src/documents/Demonstrações Contabeis 2024/2024.zip
+/src/documents/relatorio.csv
+/src/documents/Demonstrações Contabeis 2024/2024.4.zip
+/src/documents/Demonstrações Contabeis 2024/2024.3.zip
+/src/documents/Demonstrações Contabeis 2024/2024.2.zip
+/src/documents/Demonstrações Contabeis 2024/2024.1.zip
+/src/documents/Demonstrações Contabeis 2023/2023.zip
+/src/documents/Demonstrações Contabeis 2023/2023.4.zip
+/src/documents/Demonstrações Contabeis 2023/2023.3.zip
+/src/documents/Demonstrações Contabeis 2023/2023.2.zip
+/src/documents/Demonstrações Contabeis 2023/2023.1.zip

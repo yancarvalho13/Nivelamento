@@ -11,7 +11,7 @@ public class Main {
 
     long startTime = System.currentTimeMillis();
     System.out.println("Acessing URL");
-    WebScraper webScraper = new WebScraper("https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos");
+    WebScraper webScraper1 = new WebScraper("https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos");
 
     Map<String, String> pdfLinks = new HashMap<>();
 
@@ -21,24 +21,24 @@ public class Main {
     pdfNames[1] = "anexoii";
 
     System.out.println("Finding pdf links");
-    pdfLinks = webScraper.findPdfLinksByName(pdfNames);
+    pdfLinks = webScraper1.findFilesLinksByName(pdfNames,"pdf");
 
     for (String pdfLink : pdfLinks.keySet()) {
       System.out.println(pdfLink);
     }
 
     System.out.println("Downloading pdf files");
-    webScraper.DownloadPdfFilesByLink(pdfLinks, "src/main/resources/downloads");
+    webScraper1.downloadFilesByLink(pdfLinks,"pdf","src/downloads");
 
-    Set<String> filesPath= webScraper.listDirectoryFiles("src/main/resources/downloads");
+    Set<String> filesPath= webScraper1.listDirectoryFiles("src/downloads");
 
     System.out.println("Ziping files");
-    webScraper.zipFiles(filesPath,"anexos" ,"src/main/resources/downloads");
+    webScraper1.zipFiles(filesPath,"anexos" ,"src/downloads");
 
     System.out.println("Finding Pdf files");
     DataTransformer dataTransformer = new DataTransformer();
-    String filePath = "src/main/resources/downloads/anexoi.pdf";
-    String outputPath = "src/main/resources/downloads/anexoi.csv";
+    String filePath = "src/downloads/anexoi.pdf";
+    String outputPath = "src/downloads/anexoi.csv";
 
 
     dataTransformer.ExtractTableWithTabula(filePath,outputPath);
@@ -47,13 +47,38 @@ public class Main {
 
 
 
-    String filePath2 = "src/main/resources/downloads/anexoi.csv";
-    String outputPath2 = "src/main/resources/downloads";
+    String filePath2 = "src/downloads/anexoi.csv";
+    String outputPath2 = "src/downloads";
     dataTransformer.zipFile(filePath2,"Teste_Yan_Carvalho",outputPath2);
     System.out.println("File compressed in: "+ outputPath2);
 
     long endTime = System.currentTimeMillis();
     System.out.println("Execution time: " + (endTime - startTime) + "ms");
 
+
+    WebScraper webScraper2 = new WebScraper("https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/");
+    String [] pdfNames2 = new String[1];
+    pdfNames2[0] = "relatorio";
+    Map<String,String> pdfLinks2 = webScraper2.findFilesLinksByName(pdfNames2,"csv");
+    for(String pdfLink : pdfLinks2.keySet()){
+      System.out.println(pdfLinks2.get(pdfLink));
+    }
+    webScraper2.downloadFilesByLink(pdfLinks2,"csv","src/documents");
+
+    webScraper2 = new WebScraper("https://dadosabertos.ans.gov.br/FTP/PDA/demonstracoes_contabeis/2023/");
+    String reference = "2023";
+    pdfLinks2 = webScraper2.findFilesLinksByReference(reference,"zip");
+    for(String pdfLink : pdfLinks2.keySet()){
+      System.out.println(pdfLinks2.get(pdfLink));
+    }
+    webScraper2.downloadFilesByLink(pdfLinks2, "zip","src/documents/Demonstrações Contabeis 2023");
+
+    webScraper2 = new WebScraper("https://dadosabertos.ans.gov.br/FTP/PDA/demonstracoes_contabeis/2024/");
+    String reference2 = "2024";
+    pdfLinks2 = webScraper2.findFilesLinksByReference(reference2,"zip");
+    for(String pdfLink : pdfLinks2.keySet()){
+      System.out.println(pdfLinks2.get(pdfLink));
+    }
+    webScraper2.downloadFilesByLink(pdfLinks2, "zip","src/documents/Demonstrações Contabeis 2024");
   }
 }
