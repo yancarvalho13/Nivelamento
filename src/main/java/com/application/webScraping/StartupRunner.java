@@ -1,6 +1,7 @@
 package com.application.webScraping;
 
 import com.application.webScraping.repository.OperadoraFinanceiroRepository;
+import com.application.webScraping.service.OperadoraSaudeService;
 import com.application.webScraping.service.dataTransformer.DataTransformer;
 import com.application.webScraping.service.operadoraFinanceiro.OperadoraFinanceiroService;
 import com.application.webScraping.service.webScrapp.WebScraper;
@@ -15,11 +16,13 @@ public class StartupRunner implements CommandLineRunner {
 
   private final OperadoraFinanceiroService operadoraFinanceiroService;
   private final OperadoraFinanceiroRepository operadoraFinanceiroRepository;
+  private final OperadoraSaudeService operadoraSaudeService;
 
   public StartupRunner(OperadoraFinanceiroService operadoraFinanceiroService,
-                       OperadoraFinanceiroRepository operadoraFinanceiroRepository) {
+                       OperadoraFinanceiroRepository operadoraFinanceiroRepository, OperadoraSaudeService operadoraSaudeService) {
     this.operadoraFinanceiroService = operadoraFinanceiroService;
     this.operadoraFinanceiroRepository = operadoraFinanceiroRepository;
+    this.operadoraSaudeService = operadoraSaudeService;
   }
 
   @Override
@@ -29,6 +32,7 @@ public class StartupRunner implements CommandLineRunner {
 //    processAnexoIPdf();
 //    processRelatoriosOperadoras();
 //    processDemonstraçõesContabeis();
+      processarDadosOperadoras("src/documents/relatorio.csv");
 
 
     long endTime = System.currentTimeMillis();
@@ -113,5 +117,9 @@ public class StartupRunner implements CommandLineRunner {
       System.out.println("Importando CSV: " + pathCompleto);
       operadoraFinanceiroService.extractCsvData(pathCompleto);
     }
+  }
+
+  private void processarDadosOperadoras(String path) {
+    operadoraSaudeService.extractCsvData(path);
   }
 }

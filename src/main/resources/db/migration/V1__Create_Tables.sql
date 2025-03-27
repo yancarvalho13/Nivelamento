@@ -21,3 +21,4 @@ CREATE TABLE operadoras_saude (
                                   regiao_comercializacao INT,
                                   data_registro_ans DATE
 );
+
