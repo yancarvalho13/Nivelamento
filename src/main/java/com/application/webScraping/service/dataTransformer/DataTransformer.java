@@ -8,20 +8,28 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class DataTransformer {
-
+  private final Lock writingLock = new ReentrantLock();
+  private volatile boolean isTransforming = false;
   public DataTransformer() {
   }
 
   public void ExtractTableWithTabula(String filePath, String outputPath){
-
+    writingLock.lock();
     // Utiliza try-with-resources para garantir o fechamento dos streams e documentos
     try(InputStream inputStream = new FileInputStream(filePath);
         PDDocument document = PDDocument.load(inputStream);
         FileWriter fileWriter = new FileWriter(outputPath);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+
+      isTransforming = true;
 
       // Algoritmo de extração de planilhas (Tabula) que interpreta a estrutura tabular do PDF
       SpreadsheetExtractionAlgorithm seaAlgorithm = new SpreadsheetExtractionAlgorithm();
@@ -29,6 +37,7 @@ public class DataTransformer {
       StringBuilder stringBuilder = new StringBuilder();
 
       // Itera por cada página do documento
+      System.out.println("Extracting table...");
       while (pageIterator.hasNext()) {
         Page page = pageIterator.next();
         List<Table> table = seaAlgorithm.extract(page);
@@ -57,13 +66,16 @@ public class DataTransformer {
       }
       // Escreve o conteúdo processado no arquivo de saída
       bufferedWriter.write(stringBuilder.toString());
-
+      System.out.println("Table written to " + outputPath);
     } catch (Exception e ){
       // Verifica se o erro é de arquivo não encontrado para exibir uma mensagem específica
       if(e instanceof FileNotFoundException){
         System.err.println("Arquivo não encontrado, se estiver baixando o arquivo, aguarde o Download terminar para chamar o metodo!");
       }
       e.printStackTrace();
+    }finally {
+      isTransforming = false;
+      writingLock.unlock();
     }
   }
 
@@ -79,6 +91,49 @@ public class DataTransformer {
       formattedText = formattedText.replaceAll("\\b" + Pattern.quote(key) + "\\b", replacement);
     }
     return formattedText;
+  }
+
+  public void zipFile(String filePath, String fileName, String outputPath) {
+    writingLock.lock();
+
+    try {
+      // Aguarda conclusão de downloads em andamento
+      while (isTransforming) {
+        Thread.sleep(100);
+      }
+      String zipFilePath = outputPath + "/" + fileName + ".zip";
+
+      try (FileOutputStream fileOutputStream = new FileOutputStream(zipFilePath);
+           ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream)) {
+
+        File file = new File(filePath);
+
+        System.out.println("Compressing file " + file.getName());
+        // Cria entrada para cada arquivo no ZIP
+        ZipEntry zipEntry = new ZipEntry(file.getName());
+        zipOutputStream.putNextEntry(zipEntry);
+
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)) {
+
+          // Buffer de 16k para otimização de performance de leitura/escrita
+          byte[] buffer = new byte[16 * 1024];
+          while (bufferedInputStream.read(buffer) != -1) {
+            zipOutputStream.write(buffer, 0, buffer.length);
+          }
+        }
+
+        zipOutputStream.closeEntry();
+
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    } finally {
+      writingLock.unlock();
+      System.out.println("Zip file compressed!");
+    }
   }
 
   // Método auxiliar para formatação simples do texto da célula (sem substituições)

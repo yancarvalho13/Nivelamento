@@ -117,15 +117,17 @@ public class WebScraper {
 
   // Método de compressão de arquivos em ZIP
   // Implementa compressão com buffer otimizado para performance
-  public void zipFiles(Set<String> filesPath, String outputPath) {
+  public void zipFiles(Set<String> filesPath,String fileName,String outputPath) {
     downloadLock.lock();
+
     try {
       // Aguarda conclusão de downloads em andamento
       while (isDownloading) {
         Thread.sleep(100);
       }
+      String zipFilePath = outputPath + "/" + fileName + ".zip";
 
-      try (FileOutputStream fileOutputStream = new FileOutputStream(outputPath + "/zipedFiles.zip");
+      try (FileOutputStream fileOutputStream = new FileOutputStream(zipFilePath);
            ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream)) {
 
         for (String filePath : filesPath) {
