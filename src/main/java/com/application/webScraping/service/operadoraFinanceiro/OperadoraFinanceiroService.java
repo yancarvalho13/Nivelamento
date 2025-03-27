@@ -1,10 +1,7 @@
 package com.application.webScraping.service.operadoraFinanceiro;
 
-import com.application.webScraping.dto.OperadorFinanceiroDto;
-import com.application.webScraping.model.OperadoraFinanceiroEntity;
 import com.application.webScraping.repository.OperadoraFinanceiroRepository;
 
-import org.postgresql.PGConnection;
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;
 import org.springframework.stereotype.Service;
@@ -15,10 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import java.util.List;
 
 
 @Service

@@ -1,4 +1,4 @@
-package com.application.webScraping.service;
+package com.application.webScraping.service.operadoraSaude;
 
 import org.postgresql.copy.CopyManager;
 import org.postgresql.core.BaseConnection;

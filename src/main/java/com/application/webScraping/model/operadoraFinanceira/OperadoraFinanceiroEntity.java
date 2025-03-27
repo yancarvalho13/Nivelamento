@@ -1,4 +1,4 @@
-package com.application.webScraping.model;
+package com.application.webScraping.model.operadoraFinanceira;
 
 
 import com.application.webScraping.dto.OperadorFinanceiroDto;
