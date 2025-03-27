@@ -2,10 +2,7 @@ package com.application.webScraping.model;
 
 
 import com.application.webScraping.dto.OperadorFinanceiroDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,19 +11,29 @@ import java.time.LocalDate;
 @IdClass(OperadoraFinanceiroEntityId.class)
 public class OperadoraFinanceiroEntity {
   @Id
+  @Column(name = "data_registro", nullable = false)
   private LocalDate dataRegistro;
+
   @Id
+  @Column(name = "reg_ans", nullable = false)
   private int regAns;
+
   @Id
+  @Column(name = "cd_conta_contabil", nullable = false)
   private long cdContaContabil;
 
+  @Column(name = "descricao")
   private String descricao;
-  private BigDecimal vlSaldoInicial;
-  private BigDecimal vlSaldoFinal;
+
+  @Column(name = "vl_saldo_inicial", nullable = false)
+  private BigDecimal vlSaldoInicial = BigDecimal.ZERO;
+
+  @Column(name = "vl_saldo_final", nullable = false)
+  private BigDecimal vlSaldoFinal = BigDecimal.ZERO;
 
   public OperadoraFinanceiroEntity() {
-
   }
+
 
   public OperadoraFinanceiroEntity(LocalDate dataRegistro, int regAns, long cdContaContabil, String descricao, BigDecimal vlSaldoInicial, BigDecimal vlSaldoFinal) {
     this.dataRegistro = dataRegistro;
@@ -38,12 +45,12 @@ public class OperadoraFinanceiroEntity {
   }
 
   public OperadoraFinanceiroEntity(OperadorFinanceiroDto dto) {
-    this.dataRegistro = dto.dataRegistro();
-    this.regAns = dto.regAns();
-    this.cdContaContabil = dto.cdContaContabil();
-    this.descricao = dto.descricao();
-    this.vlSaldoInicial = dto.vlSaldoInicial();
-    this.vlSaldoFinal = dto.vlSaldoFinal();
+    this.dataRegistro = dto.getDataRegistro();
+    this.regAns = dto.getRegAns();
+    this.cdContaContabil = dto.getCdContaContabil();
+    this.descricao = dto.getDescricao();
+    this.vlSaldoInicial = dto.getVlSaldoInicial();
+    this.vlSaldoFinal = dto.getVlSaldoFinal();
   }
 
   public LocalDate getDataRegistro() {
