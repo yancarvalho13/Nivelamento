@@ -12,10 +12,13 @@ public class OperadoraSaudeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(name = "registro_ans")
     private String regAns;
     @NotNull
     private String cnpj;
+    @Column(name = "razao_social")
     private String razaoSocial;
+    @Column(name = "nome_fantasia")
     private String nomeFantasia;
     private String modalidade;
     private String logradouro;
@@ -28,17 +31,18 @@ public class OperadoraSaudeEntity {
     private String ddd;
     private String telefone;
     private String fax;
+    @Column(name = "endereco_eletronico")
     private String endEletronico;
     private String representante;
     private String cargoRepresentante;
+    @Column(name = "regiao_comercializacao")
     private Integer regiaoComercializacao;
     private Date dataRegAns;
 
     public OperadoraSaudeEntity() {
-
     }
 
-    public OperadoraSaudeEntity(Long id, String regAns, String cnpj, String razaoSocial, String nomeFantasia, String modalidade, String logradouro, String numero, String complemento, String bairro, String cidade, String uf, String cep, String ddd, String telefone, String fax, String endEletronico, String representante, String cargoRepresentante, int regiaoComercializacao, Date dataRegAns) {
+    public OperadoraSaudeEntity(Long id, String regAns, String cnpj, String razaoSocial, String nomeFantasia, String modalidade, String logradouro, String numero, String complemento, String bairro, String cidade, String uf, String cep, String ddd, String telefone, String fax, String endEletronico, String representante, String cargoRepresentante, Integer regiaoComercializacao, Date dataRegAns) {
         this.id = id;
         this.regAns = regAns;
         this.cnpj = cnpj;
@@ -58,6 +62,9 @@ public class OperadoraSaudeEntity {
         this.endEletronico = endEletronico;
         this.representante = representante;
         this.cargoRepresentante = cargoRepresentante;
+        if(regiaoComercializacao == null) {
+
+        }
         this.regiaoComercializacao = regiaoComercializacao;
         this.dataRegAns = dataRegAns;
     }
@@ -214,11 +221,11 @@ public class OperadoraSaudeEntity {
         this.cargoRepresentante = cargoRepresentante;
     }
 
-    public int getRegiaoComercializacao() {
+    public Integer getRegiaoComercializacao() {
         return regiaoComercializacao;
     }
 
-    public void setRegiaoComercializacao(int regiaoComercializacao) {
+    public void setRegiaoComercializacao(Integer regiaoComercializacao) {
         this.regiaoComercializacao = regiaoComercializacao;
     }
 
