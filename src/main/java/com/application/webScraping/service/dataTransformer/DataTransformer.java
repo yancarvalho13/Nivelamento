@@ -1,6 +1,8 @@
 package com.application.webScraping.service.dataTransformer;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import technology.tabula.*;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
@@ -15,9 +17,12 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+
 public class DataTransformer {
   private final Lock writingLock = new ReentrantLock();
   private volatile boolean isTransforming = false;
+
+
   public DataTransformer() {
   }
 
