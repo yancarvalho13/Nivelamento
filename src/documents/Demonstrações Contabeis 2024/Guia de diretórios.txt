@@ -1,0 +1,1 @@
+Descompacte os arquivos 2024.(1,2,3,4), na pasta 2024;
