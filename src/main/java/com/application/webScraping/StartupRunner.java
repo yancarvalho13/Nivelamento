@@ -31,7 +31,7 @@ public class StartupRunner implements CommandLineRunner {
   public void run(String... args) {
     long startTime = System.currentTimeMillis();
 
-    //executarPipelineCompleto();
+    executarPipelineCompleto();
 
     long endTime = System.currentTimeMillis();
     System.out.println("Execução finalizada em: " + (endTime - startTime) + "ms");
